@@ -1,11 +1,62 @@
 import 'dart:html' as html; // For webcam access
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 void main() {
   runApp(TrackFitApp());
 }
 
-class TrackFitApp extends StatelessWidget {
+class TrackFitApp extends StatefulWidget {
+  @override
+  _TrackFitAppState createState() => _TrackFitAppState();
+}
+
+class _TrackFitAppState extends State<TrackFitApp> {
+  late VideoPlayerController _controller;
+  double _loadingPercentage = 0.0; // To track loading percentage
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the video player controller with a local video file
+    _controller = VideoPlayerController.asset('assets/videos/videoplayback.mp4') // Load video from assets
+      ..initialize().then((_) {
+        setState(() {
+          _controller.setLooping(true); // Optional: Loop the video
+        });
+      });
+
+    // Listener to track the loading percentage
+    _controller.addListener(() {
+      if (_controller.value.isBuffering) {
+        // Calculate loading percentage
+        final buffered = _controller.value.buffered;
+        if (buffered.isNotEmpty) {
+          final totalBuffered = buffered.last.end.inMilliseconds; // Total buffered time
+          final duration = _controller.value.duration.inMilliseconds; // Total video duration
+          setState(() {
+            _loadingPercentage = (totalBuffered / duration) * 100; // Calculate percentage
+          });
+        }
+      } else {
+        // Reset loading percentage when not buffering
+        setState(() {
+          _loadingPercentage = 100.0; // Assume fully loaded if not buffering
+        });
+      }
+
+      if (_controller.value.hasError) {
+        print("Error: ${_controller.value.errorDescription}");
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // Dispose the controller when the widget is disposed
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,7 +79,12 @@ class TrackFitApp extends StatelessWidget {
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                // Start video playback when the button is pressed
+                setState(() {
+                  _controller.play(); // Now the play will work due to user interaction
+                });
+              },
               child: Text('Get Started'),
             ),
 
@@ -57,13 +113,46 @@ class TrackFitApp extends StatelessWidget {
               child: Text('Start Webcam'),
             ),
             SizedBox(height: 20),
-            Container(
-              width: 640,
-              height: 480,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white),
-              ),
-              child: HtmlElementView(viewType: 'videoElement'), // Embeds video stream
+
+            // Video Section
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  width: 640,
+                  height: 480,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                  ),
+                  child: HtmlElementView(viewType: 'videoElement'), // Embeds video stream
+                ),
+                Container(
+                  width: 640,
+                  height: 480,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                  ),
+                  child: _controller.value.isInitialized
+                      ? Column(
+                          children: [
+                            AspectRatio(
+                              aspectRatio: _controller.value.aspectRatio,
+                              child: VideoPlayer(_controller),
+                            ),
+                            SizedBox(height: 10),
+                            // Display loading percentage
+                            LinearProgressIndicator(
+                              value: _loadingPercentage / 100,
+                              backgroundColor: Colors.grey,
+                              color: Colors.green,
+                            ),
+                            SizedBox(height: 5),
+                            Text('${_loadingPercentage.toStringAsFixed(0)}% Loaded'), // Percentage Text
+                          ],
+                        )
+                      : Center(child: CircularProgressIndicator()), // Show loading indicator
+                ),
+              ],
             ),
           ],
         ),
