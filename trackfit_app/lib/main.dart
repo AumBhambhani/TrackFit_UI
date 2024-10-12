@@ -1,3 +1,4 @@
+import 'dart:html' as html; // For webcam access
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,58 +15,83 @@ class TrackFitApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('TrackFit'),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header Section
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Elevate Your Workout!',
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Get Started'),
-                    ),
-                  ],
-                ),
+        body: ListView(
+          padding: EdgeInsets.all(20.0),
+          children: [
+            // Header Section
+            Text(
+              'Elevate Your Workout!',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
               ),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text('Get Started'),
+            ),
 
-              // Package Section
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Our Packages', style: TextStyle(fontSize: 22)),
-                    SizedBox(height: 20),
-                    PackageCard(name: 'Basic Plan', price: '\$25'),
-                    PackageCard(name: 'Pro Plan', price: '\$55'),
-                    PackageCard(name: 'Advanced Plan', price: '\$75'),
-                    PackageCard(name: 'Premium Plan', price: '\$100'),
-                  ],
-                ),
-              ),
+            // Package Section
+            SizedBox(height: 20),
+            Text('Our Packages', style: TextStyle(fontSize: 22)),
+            SizedBox(height: 20),
+            PackageCard(name: 'Basic Plan', price: '\$25'),
+            PackageCard(name: 'Pro Plan', price: '\$55'),
+            PackageCard(name: 'Advanced Plan', price: '\$75'),
+            PackageCard(name: 'Premium Plan', price: '\$100'),
 
-              // Footer Section
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: Text(
-                  'Subscribe to our fitness tips!',
-                  style: TextStyle(fontSize: 18),
-                ),
+            // Footer Section
+            SizedBox(height: 20),
+            Text(
+              'Subscribe to our fitness tips!',
+              style: TextStyle(fontSize: 18),
+            ),
+
+            // Webcam Section
+            SizedBox(height: 30), // Space before the webcam section
+            ElevatedButton(
+              onPressed: () {
+                startWebcam(); // Start webcam stream on button press
+              },
+              child: Text('Start Webcam'),
+            ),
+            SizedBox(height: 20),
+            Container(
+              width: 640,
+              height: 480,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white),
               ),
-            ],
-          ),
+              child: HtmlElementView(viewType: 'videoElement'), // Embeds video stream
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  // Method to start the webcam stream and assign it to the video element
+  void startWebcam() {
+    final html.VideoElement videoElement = html.VideoElement()
+      ..width = 640
+      ..height = 480
+      ..autoplay = true;
+
+    // Get the webcam stream
+    html.window.navigator.mediaDevices?.getUserMedia({'video': true}).then((stream) {
+      videoElement.srcObject = stream; // Assign webcam stream to video element
+    });
+
+    // Register the video element for HtmlElementView usage
+    final videoWrapper = html.Element.div()..id = 'video-wrapper';
+    videoWrapper.append(videoElement);
+
+    // Attach to the body (or anywhere in the DOM)
+    html.document.body?.append(videoWrapper);
+
+    // Ensure Flutter knows about the viewType 'videoElement'
+    html.document.getElementById('video-wrapper');
   }
 }
 
