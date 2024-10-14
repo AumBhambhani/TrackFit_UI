@@ -1,12 +1,16 @@
 import 'dart:html' as html; // For webcam access
+import 'dart:ui' as ui; // Import dart:ui for registerViewFactory
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart'; // For registering the viewType
 
 void main() {
   runApp(TrackFitApp());
 }
 
 class TrackFitApp extends StatefulWidget {
+  const TrackFitApp({super.key});
+
   @override
   _TrackFitAppState createState() => _TrackFitAppState();
 }
@@ -14,6 +18,7 @@ class TrackFitApp extends StatefulWidget {
 class _TrackFitAppState extends State<TrackFitApp> {
   late VideoPlayerController _controller;
   double _loadingPercentage = 0.0; // To track loading percentage
+  bool _webcamStarted = false; // Track webcam state
 
   @override
   void initState() {
@@ -49,6 +54,12 @@ class _TrackFitAppState extends State<TrackFitApp> {
         print("Error: ${_controller.value.errorDescription}");
       }
     });
+
+    // Register the viewType for HtmlElementView
+    // This registers the view for displaying the webcam in Flutter Web
+    ui.platformViewRegistry.registerViewFactory('videoElement', (int viewId) {
+      return _createVideoElement(); // Call method to create webcam element
+    });
   }
 
   @override
@@ -64,20 +75,36 @@ class _TrackFitAppState extends State<TrackFitApp> {
       theme: ThemeData.dark(),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('TrackFit'),
+          title: const Text('TrackFit'),
         ),
         body: ListView(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           children: [
             // Header Section
-            Text(
+            const Text(
               'Elevate Your Workout!',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10),
+            // Package Section
+            const SizedBox(height: 20),
+            const Text('Our Packages', style: TextStyle(fontSize: 22)),
+            const SizedBox(height: 20),
+            PackageCard(name: 'Basic Plan', price: '\$25'),
+            PackageCard(name: 'Pro Plan', price: '\$55'),
+            PackageCard(name: 'Advanced Plan', price: '\$75'),
+            PackageCard(name: 'Premium Plan', price: '\$100'),
+
+            // Footer Section
+            const SizedBox(height: 20),
+            const Text(
+              'Subscribe to our fitness tips!',
+              style: TextStyle(fontSize: 18),
+            ),
+            
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 // Start video playback when the button is pressed
@@ -85,47 +112,38 @@ class _TrackFitAppState extends State<TrackFitApp> {
                   _controller.play(); // Now the play will work due to user interaction
                 });
               },
-              child: Text('Get Started'),
-            ),
-
-            // Package Section
-            SizedBox(height: 20),
-            Text('Our Packages', style: TextStyle(fontSize: 22)),
-            SizedBox(height: 20),
-            PackageCard(name: 'Basic Plan', price: '\$25'),
-            PackageCard(name: 'Pro Plan', price: '\$55'),
-            PackageCard(name: 'Advanced Plan', price: '\$75'),
-            PackageCard(name: 'Premium Plan', price: '\$100'),
-
-            // Footer Section
-            SizedBox(height: 20),
-            Text(
-              'Subscribe to our fitness tips!',
-              style: TextStyle(fontSize: 18),
+              child: const Text('Get Started'),
             ),
 
             // Webcam Section
-            SizedBox(height: 30), // Space before the webcam section
+            const SizedBox(height: 30), // Space before the webcam section
             ElevatedButton(
               onPressed: () {
-                startWebcam(); // Start webcam stream on button press
+                setState(() {
+                  _webcamStarted = true; // Start webcam stream on button press
+                });
               },
-              child: Text('Start Webcam'),
+              child: const Text('Start Webcam'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Video Section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                // Webcam View
                 Container(
                   width: 640,
                   height: 480,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white),
                   ),
-                  child: HtmlElementView(viewType: 'videoElement'), // Embeds video stream
+                  child: _webcamStarted
+                      ? const HtmlElementView(viewType: 'videoElement') // Show webcam stream
+                      : const Center(child: Text('Press Start Webcam')),
                 ),
+                
+                // Video from Asset
                 Container(
                   width: 640,
                   height: 480,
@@ -139,18 +157,18 @@ class _TrackFitAppState extends State<TrackFitApp> {
                               aspectRatio: _controller.value.aspectRatio,
                               child: VideoPlayer(_controller),
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             // Display loading percentage
                             LinearProgressIndicator(
                               value: _loadingPercentage / 100,
                               backgroundColor: Colors.grey,
                               color: Colors.green,
                             ),
-                            SizedBox(height: 5),
+                            const SizedBox(height: 5),
                             Text('${_loadingPercentage.toStringAsFixed(0)}% Loaded'), // Percentage Text
                           ],
                         )
-                      : Center(child: CircularProgressIndicator()), // Show loading indicator
+                      : const Center(child: CircularProgressIndicator()), // Show loading indicator
                 ),
               ],
             ),
@@ -160,9 +178,9 @@ class _TrackFitAppState extends State<TrackFitApp> {
     );
   }
 
-  // Method to start the webcam stream and assign it to the video element
-  void startWebcam() {
-    final html.VideoElement videoElement = html.VideoElement()
+  // Method to create the webcam element
+  html.VideoElement _createVideoElement() {
+    final videoElement = html.VideoElement()
       ..width = 640
       ..height = 480
       ..autoplay = true;
@@ -172,15 +190,7 @@ class _TrackFitAppState extends State<TrackFitApp> {
       videoElement.srcObject = stream; // Assign webcam stream to video element
     });
 
-    // Register the video element for HtmlElementView usage
-    final videoWrapper = html.Element.div()..id = 'video-wrapper';
-    videoWrapper.append(videoElement);
-
-    // Attach to the body (or anywhere in the DOM)
-    html.document.body?.append(videoWrapper);
-
-    // Ensure Flutter knows about the viewType 'videoElement'
-    html.document.getElementById('video-wrapper');
+    return videoElement; // Return the video element for use in HtmlElementView
   }
 }
 
@@ -188,13 +198,13 @@ class PackageCard extends StatelessWidget {
   final String name;
   final String price;
 
-  PackageCard({required this.name, required this.price});
+  const PackageCard({super.key, required this.name, required this.price});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.all(15),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         color: Colors.grey[800],
         borderRadius: BorderRadius.circular(10),
@@ -202,8 +212,8 @@ class PackageCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(name, style: TextStyle(fontSize: 18, color: Colors.white)),
-          Text(price, style: TextStyle(fontSize: 16, color: Colors.white70)),
+          Text(name, style: const TextStyle(fontSize: 18, color: Colors.white)),
+          Text(price, style: const TextStyle(fontSize: 16, color: Colors.white70)),
         ],
       ),
     );
