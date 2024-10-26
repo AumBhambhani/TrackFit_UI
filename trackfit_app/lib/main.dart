@@ -5,7 +5,7 @@ import 'package:video_player/video_player.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart'; // For registering the viewType
 
 void main() {
-  runApp(TrackFitApp());
+  runApp(const TrackFitApp());
 }
 
 class TrackFitApp extends StatefulWidget {
@@ -92,10 +92,10 @@ class _TrackFitAppState extends State<TrackFitApp> {
             const SizedBox(height: 20),
             const Text('Our Packages', style: TextStyle(fontSize: 22)),
             const SizedBox(height: 20),
-            PackageCard(name: 'Basic Plan', price: '\$25'),
-            PackageCard(name: 'Pro Plan', price: '\$55'),
-            PackageCard(name: 'Advanced Plan', price: '\$75'),
-            PackageCard(name: 'Premium Plan', price: '\$100'),
+            const PackageCard(name: 'Basic Plan', price: '\$25'),
+            const PackageCard(name: 'Pro Plan', price: '\$55'),
+            const PackageCard(name: 'Advanced Plan', price: '\$75'),
+            const PackageCard(name: 'Premium Plan', price: '\$100'),
 
             // Footer Section
             const SizedBox(height: 20),
