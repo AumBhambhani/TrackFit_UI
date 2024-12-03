@@ -18,6 +18,8 @@ class TrackFitApp extends StatelessWidget {
 }
 
 class TrackFitHomePage extends StatefulWidget {
+  const TrackFitHomePage({super.key});
+
   @override
   _TrackFitHomePageState createState() => _TrackFitHomePageState();
 }
@@ -29,7 +31,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
   void _scrollToTop() {
     _scrollController.animateTo(
       0, // Scroll to the top
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
       curve: Curves.easeInOut,
     );
   }
@@ -39,7 +41,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
     double offset = sectionIndex * 500; // Adjust based on section heights
     _scrollController.animateTo(
       offset,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
       curve: Curves.easeInOut,
     );
   }
@@ -50,18 +52,18 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Login / Register'),
+          title: const Text('Login / Register'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
+              const TextField(
                 decoration: InputDecoration(labelText: 'Email'),
               ),
-              TextField(
+              const TextField(
                 decoration: InputDecoration(labelText: 'Password'),
                 obscureText: true,
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
                   _showLoginWindow(context);
@@ -69,7 +71,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 ),
-                child: Text(
+                child: const Text(
                   'Submit',
                   style: TextStyle(color: Colors.black),
                 ),
@@ -106,12 +108,12 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
   // Navbar with button navigation
   Widget _buildNavbar() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 50),
+      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 50),
       color: Colors.black,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          const Text(
             'TrackFit',
             style: TextStyle(
               color: Colors.white,
@@ -122,18 +124,18 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
           Row(
             children: [
               _buildNavButton('Home', 0),
-              SizedBox(width: 25),
+              const SizedBox(width: 25),
               _buildNavButton('Live Workout Coach', 4),
-              SizedBox(width: 25),
+              const SizedBox(width: 25),
               _buildNavButton('TrackFit-Pass', 5),
-              SizedBox(width: 25),
+              const SizedBox(width: 25),
               _buildNavButton('Our Programs', 1),
-              SizedBox(width: 25),
+              const SizedBox(width: 25),
               TextButton(
                 onPressed: () {
                   _showLoginWindow(context);
                 },
-                child: Text(
+                child: const Text(
                   'Login',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
@@ -143,7 +145,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
                   _showLoginWindow(context);
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                child: Text(
+                child: const Text(
                   'Register',
                   style: TextStyle(
                     color: Colors.black,
@@ -167,7 +169,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
       },
       child: Text(
         label,
-        style: TextStyle(color: Colors.white, fontSize: 16),
+        style: const TextStyle(color: Colors.white, fontSize: 16),
       ),
     );
   }
@@ -176,7 +178,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
   Widget _buildHomePage() {
     return Container(
       height: 500,
-      padding: EdgeInsets.symmetric(horizontal: 50),
+      padding: const EdgeInsets.symmetric(horizontal: 50),
       color: Colors.black,
       child: Row(
         children: [
@@ -191,28 +193,28 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
                   animatedTexts: [
                     TypewriterAnimatedText(
                       'AI Meets Fitness...\nTrain Smart, Not Hard!',
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         color: Colors.blue,
                         fontSize: 50,
                         fontWeight: FontWeight.bold,
                       ),
-                      speed: Duration(milliseconds: 180),
+                      speed: const Duration(milliseconds: 180),
                     ),
                   ],
                   repeatForever: false,
-                  pause: Duration(milliseconds: 1000),
+                  pause: const Duration(milliseconds: 1000),
                   displayFullTextOnTap: true,
                   stopPauseOnTap: true,
                 ),
-                SizedBox(height: 20),
-                Text(
+                const SizedBox(height: 20),
+                const Text(
                   '"Revolutionizing the Future of Fitness, with live feedback and corrections thereby maximum Efficiency and Results".',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Row(
                   children: [
                     ElevatedButton(
@@ -222,7 +224,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                       ),
-                      child: Text(
+                      child: const Text(
                         'Start Training',
                         style: TextStyle(
                           color: Colors.black,
@@ -231,13 +233,13 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     TextButton.icon(
                       onPressed: () {
                         _showLoginWindow(context);
                       },
-                      icon: Icon(Icons.play_arrow, color: Colors.white),
-                      label: Text(
+                      icon: const Icon(Icons.play_arrow, color: Colors.white),
+                      label: const Text(
                         'Watch Demo',
                         style: TextStyle(color: Colors.white),
                       ),
@@ -252,7 +254,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
             width: 500,
             height: 400,
             decoration: BoxDecoration(
-              image: DecorationImage(
+              image: const DecorationImage(
                 image: AssetImage('assets/gym_people.png'),
                 fit: BoxFit.fitWidth,
               ),
@@ -260,7 +262,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
             ),
           ),
           // Right Vertical TrackFit Branding
-          RotatedBox(
+          const RotatedBox(
             quarterTurns: 3,
             child: Padding(
               padding: EdgeInsets.only(top: 50),
@@ -285,18 +287,18 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
     return Container(
       height: 500,
       color: Colors.black,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Explore Our Program Heading with Border
           Container(
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black, width: 2),
               borderRadius: BorderRadius.circular(30),
             ),
-            child: Text(
+            child: const Text(
               'Explore Our Programs',
               style: TextStyle(
                   color: Colors.grey,
@@ -304,22 +306,22 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildProgramCard('Real-Time Monitoring', Icons.fitness_center,
                   'Track your progress in real-time with accurate insights.'),
-              SizedBox(width: 30),
+              const SizedBox(width: 30),
               _buildProgramCard('Personalized Plans', Icons.list,
                   'Get customized workout plans based on your fitness goals.'),
-              SizedBox(width: 30),
+              const SizedBox(width: 30),
               _buildProgramCard('Live Alerts', Icons.notifications_active,
                   'Receive alerts and feedback during your workouts.'),
-              SizedBox(width: 30),
+              const SizedBox(width: 30),
               _buildProgramCard('Nutrition Tips', Icons.restaurant,
                   'Stay on track with personalized nutrition advice.'),
-              SizedBox(width: 30),
+              const SizedBox(width: 30),
               _buildProgramCard('Recovery Mode', Icons.healing,
                   'Optimize your recovery with guided rest periods and tips.'),
             ],
@@ -343,7 +345,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
             color: Colors.black.withOpacity(0.3),
             blurRadius: 10,
             spreadRadius: 2,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -356,20 +358,20 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
             color: Colors.blue,
             size: 60,
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Text(
             title,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.2,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               description,
               textAlign: TextAlign.center,
@@ -391,7 +393,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
     return Container(
       height: 700,
       color: Colors.black,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -402,7 +404,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
                 fontSize: 32,
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 70),
+          const SizedBox(height: 70),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -427,7 +429,7 @@ class _TrackFitHomePageState extends State<TrackFitHomePage> {
       child: Center(
         child: Text(
           label,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -569,7 +571,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
     return Container(
       height: 600,
       color: Colors.black,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -582,7 +584,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
 
           // Pass Cards Section (all four cards in a single row)
           Row(
@@ -600,7 +602,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
                   'No real-time corrections',
                 ],
               ),
-              SizedBox(width: 30), // Reduced space between cards
+              const SizedBox(width: 30), // Reduced space between cards
               _buildPassCard(
                 title: 'Mid Package',
                 price: 'Rs. 499',
@@ -612,7 +614,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
                   'Real-time Corrections',
                 ],
               ),
-              SizedBox(width: 30), // Reduced space between cards
+              const SizedBox(width: 30), // Reduced space between cards
               _buildPassCard(
                 title: 'Pro Package',
                 price: 'Rs. 999',
@@ -624,7 +626,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
                   'Real-time Corrections',
                 ],
               ),
-              SizedBox(width: 30), // Reduced space between cards
+              const SizedBox(width: 30), // Reduced space between cards
               _buildPassCard(
                 title: 'Athlete Package',
                 price: 'Rs. 1199',
@@ -669,27 +671,27 @@ Widget _buildFeatureCard(String title, IconData icon) {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.blue,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             price,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 28,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             'per month, billed annually',
             style: TextStyle(color: Colors.grey[400], fontSize: 14),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           // Descriptions with Check Icons
           ...description.map(
@@ -698,19 +700,19 @@ Widget _buildFeatureCard(String title, IconData icon) {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.check, color: Colors.white, size: 16),
+                  const Icon(Icons.check, color: Colors.white, size: 16),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       text,
-                      style: TextStyle(color: Colors.white, fontSize: 14),
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           // Register Button
           ElevatedButton(
@@ -723,7 +725,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            child: Text(
+            child: const Text(
               'Register Now',
               style: TextStyle(color: Colors.black),
             ),
@@ -737,7 +739,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
   Widget _buildFooterSection() {
     return Container(
       color: Colors.grey[900],
-      padding: EdgeInsets.symmetric(horizontal: 160, vertical: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 160, vertical: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -758,7 +760,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
                           color: Colors.grey[900],
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Icon(
                             Icons.directions_bike,
                             color: Colors.blue,
@@ -766,8 +768,8 @@ Widget _buildFeatureCard(String title, IconData icon) {
                           ),
                         ),
                       ),
-                      SizedBox(width: 10),
-                      Text(
+                      const SizedBox(width: 10),
+                      const Text(
                         'TrackFit',
                         style: TextStyle(
                           color: Colors.white,
@@ -777,8 +779,8 @@ Widget _buildFeatureCard(String title, IconData icon) {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15),
-                  Text(
+                  const SizedBox(height: 15),
+                  const Text(
                     'Highlight benefits of each exercise, both\n'
                     'physical and mental considering real-time\n'
                     'feedbacks',
@@ -790,7 +792,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
                   ),
                 ],
               ),
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -808,7 +810,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
                   Text('Help Center', style: TextStyle(color: Colors.white70)),
                 ],
               ),
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -828,7 +830,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Social Media',
                     style: TextStyle(
                       color: Colors.white,
@@ -836,7 +838,7 @@ Widget _buildFeatureCard(String title, IconData icon) {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
                       FaIcon(
@@ -844,13 +846,13 @@ Widget _buildFeatureCard(String title, IconData icon) {
                         color: Colors.white,
                         size: 20,
                       ),
-                      SizedBox(width: 15),
+                      const SizedBox(width: 15),
                       FaIcon(
                         FontAwesomeIcons.twitter,
                         color: Colors.white,
                         size: 20,
                       ),
-                      SizedBox(width: 15),
+                      const SizedBox(width: 15),
                       FaIcon(
                         FontAwesomeIcons.facebook,
                         color: Colors.white,
